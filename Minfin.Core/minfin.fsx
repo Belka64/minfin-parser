@@ -4,9 +4,6 @@ open System.Net
 open System
 open FSharp.Data.JsonExtensions
 
-
-
-
 let currencies = ["usd"]//;"eur";"rub"]
 let actions = ["buy"]//;"sell"]
 let cities = ["kiev"]//;"vinnitsa";"dnepropetrovsk";"donetsk";"zhitomir";
@@ -27,9 +24,6 @@ let req = Http.RequestString(url,
                     "DNT", "1";
                     "Upgrade-Insecure-Requests", "1";], 
                      cookieContainer = cc) |> ignore
-
-
-
                     
 let GetAuctionUrls currencies actions cities = 
     List.map (fun cur-> BuildUrl cur, cur) currencies 
@@ -69,7 +63,8 @@ let ProcessData data =
 
 
 let data = GetAuctionUrls currencies actions cities |> GetData |> ProcessData |> List.toArray
-let asdas = Repository
+
+let d = new Repository()
        
 printf "%d  " data.Length
        
