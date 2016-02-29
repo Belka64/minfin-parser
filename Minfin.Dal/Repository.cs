@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Minfin.Dal
 {
@@ -13,17 +14,24 @@ namespace Minfin.Dal
             string action, string curency, int bidId)
         {
 
-            _context.Record.Add(new Record() { 
-            DealTime = dealTime,
-            Rank = rank,
-            Sum= sum,
-            Phone=phone,
-            City = city,
-            Action = action,
-            Currency = curency,
-            BidId = bidId
+            _context.Record.Add(new Record()
+            {
+                DealTime = dealTime,
+                Rank = rank,
+                Sum = sum,
+                Phone = phone,
+                City = city,
+                Action = action,
+                Currency = curency,
+                BidId = bidId
             });
             _context.SaveChanges();
+        }
+
+        public bool Existed(int bidId)
+        {
+            if (_context.Set<Record>().FirstOrDefault(x => x.BidId == bidId) != null) return false;
+            return true;
         }
     }
 }

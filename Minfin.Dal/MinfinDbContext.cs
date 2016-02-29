@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace Minfin.Dal
 {
@@ -11,6 +12,5 @@ namespace Minfin.Dal
         }
 
         public DbSet<Record> Record { get; set; }
-
     }
 }
