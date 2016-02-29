@@ -63,8 +63,12 @@ let main argv =
             List.map (fun (x:HtmlNode) -> GetText x "au-deal-time", GetText x "au-deal-currency", GetText x "au-deal-sum", GetPhoneNum x, GetBidNum x) row
         data |> List.collect(fun ((dataSeq:HtmlNode list), city, action, currency) -> (GetDataFromHtmlRow dataSeq) |> List.map (fun (dealtime, curRank, sum, phone, bidNum) -> dealtime, curRank, sum, phone, bidNum, city, action, currency)) 
     
+    let Save (x:(string * string * string * string * int * 'a * 'b * 'c) list) =
+        let rep = new Repository()
+        0
+
+
+    let data = GetAuctionUrls currencies actions cities |> GetData |> ProcessData |> Save
     
-    let data = GetAuctionUrls currencies actions cities |> GetData |> ProcessData |> List.toArray
-    let rep = new Repository()
     //rep.AddRecord data
     0

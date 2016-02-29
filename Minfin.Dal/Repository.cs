@@ -28,6 +28,7 @@ namespace Minfin.Dal
             BidId = bidId,
             EstimatedCreatedTime = ect
             });
+            _context.SaveChanges();
         }
     }
 }
