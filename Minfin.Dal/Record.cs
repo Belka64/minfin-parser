@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 
 namespace Minfin.Dal
 {
@@ -11,11 +8,11 @@ namespace Minfin.Dal
         [Key]
         public int Id { get; set; }
 
-        public string DealTime { get; set; }
+        public DateTime DealTime { get; set; }
 
         public string Rank { get; set; }
 
-        public string Sum { get; set; }
+        public int Sum { get; set; }
 
         public string Phone { get; set; }
 
@@ -26,8 +23,6 @@ namespace Minfin.Dal
         public string Currency { get; set; }
 
         public int BidId { get; set; }
-
-        public DateTime EstimatedCreatedTime { get; set; }
 
     }
 }

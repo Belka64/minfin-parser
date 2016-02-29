@@ -65,6 +65,7 @@
     <None Include="App.config" />
     <None Include="minfin.fsx" />
     <None Include="packages.config" />
+    <None Include="test.fsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Minfin.Dal\Minfin.Dal.csproj">

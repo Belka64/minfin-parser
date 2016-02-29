@@ -60,47 +60,11 @@ let ProcessData data =
     let GetDataFromHtmlRow (row:HtmlNode list) = 
         List.map (fun (x:HtmlNode) -> GetText x "au-deal-time", GetText x "au-deal-currency", GetText x "au-deal-sum", GetPhoneNum x, GetBidNum x) row
     data |> List.collect(fun ((dataSeq:HtmlNode list), city, action, currency) -> (GetDataFromHtmlRow dataSeq) |> List.map (fun (dealtime, curRank, sum, phone, bidNum) -> dealtime, curRank, sum, phone, bidNum, city, action, currency)) 
+    
 
 
 let data = GetAuctionUrls currencies actions cities |> GetData |> ProcessData |> List.toArray
 
-let d = new Repository()
-       
-printf "%d  " data.Length
-       
-                    
-
-
-let getPhoneNum (bidId:int) = 
-            let bidIdForGet = string (bidId + 1)
-            Http.RequestString("http://minfin.com.ua/modules/connector/connector.php"
-            ,query=["action", "auction-get-contacts"; "bid", bidIdForGet; "r", "true"]
-            ,body = FormValues ["bid", string bidId; "action", "auction-get-contacts"; "r", "true"]
-            ,headers = ["Accept","*/*";
-            "User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36";
-            "X-Requested-With","XMLHttpRequest"],cookieContainer = cc)
-
-let ree = getPhoneNum  12322380
-               
-
-
-
-                
-
-//let r = 
-//    let results = HtmlDocument.Load(url)
-//    results.Descendants ["div"]
-//    |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default")
-//    |> Seq.map (fun a -> a.Descendants (fun c -> c.HasClass "au-deal-time") |> Seq.find (fun x-> true) |> fun x-> x.InnerText())
-//    |> Seq.toArray
-
-
-    //|> Seq.collect (fun x-> x.Descendants (fun c -> c.HasClass "au-deal-time"))au-deal-currency
-    //|> Seq.map (fun x -> x.Descendants (fun c -> c.HasClass "au-deal-time"), x.Descendants (fun c -> c.HasClass "au-deal-currency"))
-
-
-  
-    
     
 
 

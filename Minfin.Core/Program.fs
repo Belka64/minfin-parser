@@ -6,12 +6,12 @@ open FSharp.Data.JsonExtensions
 
 [<EntryPoint>]
 let main argv = 
-    let currencies = ["usd"]//;"eur";"rub"]
-    let actions = ["buy"]//;"sell"]
-    let cities = ["kiev"]//;"vinnitsa";"dnepropetrovsk";"donetsk";"zhitomir";
-                    //"zaporozhye";"ivano-frankovsk";"kievobl";"kirovograd";"lugansk";"lutsk";
-                    //"lvov";"nikolaev";"odessa";"poltava";"rovno";"sumy";"ternopol";
-                    //"uzhgorod";"kharkov";"kherson";"khmelnitskiy";"cherkassy";"chernigov";"chernovtsy"]
+    let currencies = ["usd";"eur";"rub"]
+    let actions = ["buy";"sell"]
+    let cities = ["kiev";"vinnitsa";"dnepropetrovsk";"donetsk";"zhitomir";
+                    "zaporozhye";"ivano-frankovsk";"kievobl";"kirovograd";"lugansk";"lutsk";
+                    "lvov";"nikolaev";"odessa";"poltava";"rovno";"sumy";"ternopol";
+                    "uzhgorod";"kharkov";"kherson";"khmelnitskiy";"cherkassy";"chernigov";"chernovtsy"]
     
     let BuildUrl currency action city =
         sprintf "http://minfin.com.ua/currency/auction/%s/%s/%s/" currency action city 
@@ -57,15 +57,24 @@ let main argv =
                 ,headers = ["Accept","*/*";
                 "User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36";
                 "X-Requested-With","XMLHttpRequest"],cookieContainer = cc) |> JsonValue.Parse |> (fun x-> x?data.AsString())
-            outsidePieceOfPhone.Replace("xxx-x", insidePieceOfPhone)
-        
+            outsidePieceOfPhone.Replace("xxx-x", insidePieceOfPhone).Replace(" ", "").Replace("-", "")
+        let MakeSum (data:string) = 
+            let processStr (d:string) =  
+                d.Substring(0, d.Length - 1)
+            int (processStr (data.Replace(" ", "")))
         let GetDataFromHtmlRow (row:HtmlNode list) = 
             List.map (fun (x:HtmlNode) -> GetText x "au-deal-time", GetText x "au-deal-currency", GetText x "au-deal-sum", GetPhoneNum x, GetBidNum x) row
-        data |> List.collect(fun ((dataSeq:HtmlNode list), city, action, currency) -> (GetDataFromHtmlRow dataSeq) |> List.map (fun (dealtime, curRank, sum, phone, bidNum) -> dealtime, curRank, sum, phone, bidNum, city, action, currency)) 
+        data |> List.collect(fun ((dataSeq:HtmlNode list), city, action, currency) -> (GetDataFromHtmlRow dataSeq) |> List.map (fun (dealtime, curRank, sum, phone, bidNum) -> dealtime, curRank, MakeSum sum, phone, bidNum, city, action, currency)) 
     
-    let Save (x:(string * string * string * string * int * 'a * 'b * 'c) list) =
+    let Save x =
         let rep = new Repository()
-        0
+        let savetodb x = 
+            let makeTime t =
+                System.DateTime.Parse t
+            match x with
+            | (dealtime, curRank, sum, phone, bidNum, city, action, currency) -> rep.AddRecord(makeTime dealtime, curRank, sum, phone, city, action, currency, bidNum)
+        List.iter (fun q-> savetodb q) x
+        
 
 
     let data = GetAuctionUrls currencies actions cities |> GetData |> ProcessData |> Save

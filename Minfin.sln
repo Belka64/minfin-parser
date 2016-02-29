@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Minfin.Core", "Minfin.Core\Minfin.Core.fsproj", "{162B2C1C-0917-4B2C-8F21-B5EB1C8AFCFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minfin.Dal", "Minfin.Dal\Minfin.Dal.csproj", "{50394B51-0FC3-4E8E-9733-68F65474B472}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{37907326-1FF5-4CA3-9A62-2C747014A4C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{50394B51-0FC3-4E8E-9733-68F65474B472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50394B51-0FC3-4E8E-9733-68F65474B472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50394B51-0FC3-4E8E-9733-68F65474B472}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37907326-1FF5-4CA3-9A62-2C747014A4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37907326-1FF5-4CA3-9A62-2C747014A4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37907326-1FF5-4CA3-9A62-2C747014A4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37907326-1FF5-4CA3-9A62-2C747014A4C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
