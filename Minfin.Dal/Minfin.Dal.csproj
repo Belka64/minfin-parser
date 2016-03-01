@@ -46,6 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201603011406421_InitialMigrations.cs" />
+    <Compile Include="Migrations\201603011406421_InitialMigrations.Designer.cs">
+      <DependentUpon>201603011406421_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603011410547_InitialMigrations1.cs" />
+    <Compile Include="Migrations\201603011410547_InitialMigrations1.Designer.cs">
+      <DependentUpon>201603011410547_InitialMigrations1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MinfinDbContext.cs" />
     <Compile Include="Record.cs" />
     <Compile Include="Repository.cs" />
@@ -54,6 +63,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201603011406421_InitialMigrations.resx">
+      <DependentUpon>201603011406421_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603011410547_InitialMigrations1.resx">
+      <DependentUpon>201603011410547_InitialMigrations1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

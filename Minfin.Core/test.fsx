@@ -10,3 +10,11 @@ let MakeSum (data:string) =
             int (processStr (data.Replace(" ", "")))
 
 MakeSum "28 000 $"
+
+
+let make (d:string) =
+    let p d =  
+        System.Decimal.Parse d
+    p d
+
+make "27,8"

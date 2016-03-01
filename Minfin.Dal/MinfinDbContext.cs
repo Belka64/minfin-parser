@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Minfin.Dal.Migrations;
 using System.Data.Entity;
 
 namespace Minfin.Dal
@@ -8,7 +8,7 @@ namespace Minfin.Dal
         public MinfinDbContext()
             : base("minfinlocaldb")
         {
-            Database.SetInitializer<MinfinDbContext>(new CreateDatabaseIfNotExists<MinfinDbContext>());
+            Database.SetInitializer<MinfinDbContext>(new MigrateDatabaseToLatestVersion<MinfinDbContext, Configuration>());
         }
 
         public DbSet<Record> Record { get; set; }

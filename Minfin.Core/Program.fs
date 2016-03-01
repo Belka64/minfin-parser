@@ -74,7 +74,7 @@ let main argv =
             let makeTime t =
                 System.DateTime.Parse t
             match x with
-            | (dealtime, curRank, sum, phone, bidNum, city, action, currency) -> rep.AddRecord(makeTime dealtime, curRank, sum, phone, city, action, currency, bidNum)
+            | (dealtime, curRank, sum, phone, bidNum, city, action, currency) -> rep.AddRecord(makeTime dealtime, curRank, sum, phone, city, action, currency, bidNum, (System.Decimal.Parse curRank))
         List.iter (fun q-> savetodb q) x
 
     let data = GetAuctionUrls currencies actions cities |> GetData |> ProcessData |> Save

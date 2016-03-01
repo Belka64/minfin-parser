@@ -24,5 +24,7 @@ namespace Minfin.Dal
 
         public int BidId { get; set; }
 
+        public decimal BidRate { get; set; }
+
     }
 }
