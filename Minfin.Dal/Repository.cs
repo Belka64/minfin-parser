@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Minfin.Dal
 {
-    public class Repository
+    public class Repository : IRepository
     {
         private MinfinDbContext _context;
         public Repository()

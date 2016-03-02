@@ -22,6 +22,8 @@ let GetAuctionUrls currencies actions cities =
 
 
 let build =
-    List.reduce (fun acc el -> List.collect (fun c -> c) (List.map (fun t-> List.map (fun x-> sprintf "%s/%s" x t ) acc) el) ) [["http://minfin.com.ua/currency/auction/"]; currencies; actions; cities]
+    List.reduce (fun acc el -> List.collect (fun c -> c) 
+                                            (List.map (fun t-> List.map (fun x-> sprintf "%s/%s" x t ) acc) el) )
+                [["http://minfin.com.ua/currency/auction/"]; currencies; actions; cities]
 
 
