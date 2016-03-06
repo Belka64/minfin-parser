@@ -25,7 +25,8 @@ module MinfinRawData =
             |> (fun funcs -> List.collect (fun city -> List.map (fun (f, act, cur) -> f city, city, act, cur) funcs) cities ) 
                                                         
         let GetData urls = 
-            let GetBids (uri:string) = 
+            let GetBids uri = 
+                printf "Load html from %s" uri
                 let results = HtmlDocument.Load(uri)
                 results.Descendants ["div"]
                 |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default")
