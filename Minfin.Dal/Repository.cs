@@ -17,7 +17,6 @@ namespace Minfin.Dal
             _context.Record.Add(new Record()
             {
                 DealTime = dealTime,
-                Rank = rank,
                 Sum = sum,
                 Phone = phone,
                 City = city,
@@ -26,6 +25,12 @@ namespace Minfin.Dal
                 BidId = bidId,
                 BidRate = bidRate
             });
+            _context.SaveChanges();
+        }
+
+        public void AddRecord(Record record)
+        {
+            _context.Record.Add(record);
             _context.SaveChanges();
         }
 

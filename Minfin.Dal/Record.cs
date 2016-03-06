@@ -10,8 +10,6 @@ namespace Minfin.Dal
 
         public DateTime DealTime { get; set; }
 
-        public string Rank { get; set; }
-
         public int Sum { get; set; }
 
         public string Phone { get; set; }
