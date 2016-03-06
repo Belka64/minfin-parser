@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Minfin.Core", "Minfin.Core\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minfin.Dal", "Minfin.Dal\Minfin.Dal.csproj", "{50394B51-0FC3-4E8E-9733-68F65474B472}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Minfin.Crawler", "Minfin.Crawler\Minfin.Crawler.fsproj", "{2AF2D4B8-B2FD-45E1-82E7-09E781B782B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{50394B51-0FC3-4E8E-9733-68F65474B472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50394B51-0FC3-4E8E-9733-68F65474B472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50394B51-0FC3-4E8E-9733-68F65474B472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF2D4B8-B2FD-45E1-82E7-09E781B782B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF2D4B8-B2FD-45E1-82E7-09E781B782B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF2D4B8-B2FD-45E1-82E7-09E781B782B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF2D4B8-B2FD-45E1-82E7-09E781B782B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
