@@ -79,6 +79,13 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Minfin.Dal\Minfin.Dal.csproj">
+      <Name>Minfin.Dal</Name>
+      <Project>{50394b51-0fc3-4e8e-9733-68f65474b472}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
