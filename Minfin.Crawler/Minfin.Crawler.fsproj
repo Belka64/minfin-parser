@@ -57,9 +57,9 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
-    <Compile Include="Program.fs" />
     <Compile Include="MinfinRawData.fs" />
     <Compile Include="MinfinMain.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">

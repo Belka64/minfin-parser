@@ -1,11 +1,15 @@
 ﻿namespace Minfin
 open FSharp.Data
-type RawRecord = 
+open System
+type Record = 
     {
         City : string;
         Action : string;
         Currency : string;
-        Bids : HtmlNode list
+        DealHtml : HtmlNode option
+        DealTime : DateTime option;
+        DealRate : decimal option;
+        DealSum : int option;
     }
 module MinfinRawData = 
     let GetRawData =    
@@ -31,5 +35,10 @@ module MinfinRawData =
                 results.Descendants ["div"]
                 |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default")
                 |> List.ofSeq 
-            List.map (fun (url, city, action, currency)-> {City = city; Action = action; Currency = currency; Bids = (GetBids url)}) urls
+            List.collect (fun (url, city, action, currency)-> List.map (fun x-> {City = city; Action = action; Currency = currency; DealTime = None; DealRate = None; DealSum = None; DealHtml = Some(x)}) (GetBids url)) urls
         GetAuctionUrls currencies actions cities |> GetData
+
+[<EntryPoint>]
+let main argv = 
+    printfn "%A" argv
+    0 // return an integer exit code
