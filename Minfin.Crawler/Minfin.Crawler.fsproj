@@ -57,7 +57,6 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
-    <Compile Include="MinfinRawData.fs" />
     <Compile Include="MinfinMain.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

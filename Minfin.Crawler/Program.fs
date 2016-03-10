@@ -1,7 +1,8 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
+﻿open Minfin.MinfinRawData
 
 [<EntryPoint>]
 let main argv = 
-    printfn "%A" argv
+    
+    let asd = GetRawData
+    printfn "%d" asd.Length
     0 // return an integer exit code
