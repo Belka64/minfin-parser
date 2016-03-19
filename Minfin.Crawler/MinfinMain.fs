@@ -1,6 +1,12 @@
 ﻿namespace Minfin
 open FSharp.Data
 open System
+open Akka.FSharp
+open Akka
+open Akka.Actor
+open FSharp.Data
+open System.Threading
+open Akka.Configuration
 type Record = 
     {
         City : string;
@@ -11,8 +17,38 @@ type Record =
 //        DealRate : decimal option;
 //        DealSum : int option;
     }
-module MinfinRawData = 
-    let GetRawData =    
+
+
+module Actors =
+    open Minfin.Dal
+    open System.Threading
+    let StartSystem =
+                                                                                        
+        
+        let system = ActorSystem.Create("minfin")
+        let pageProcessor = spawn system "pageprocessor" (actorOf2 (fun mailbox m -> (
+                                                                                        let nodeProcessor = select "akka://minfin/user/nodeprocessor" system
+                                                                                        
+                                                                                        match m with
+                                                                                        | (url:string, city:string, action:string, currency:string)-> 
+                                                                                            printfn "Downloading %s; TI is %d" city Thread.CurrentThread.ManagedThreadId
+                                                                                            let htmlData = HtmlDocument.Load url 
+                                                                                                        |> (fun x -> x.Descendants ["div"]) 
+                                                                                                        |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default") 
+                                                                                                        |> Seq.map (fun n -> {City = city; Action = action; Currency = currency;  DealHtml = n})
+                                                                                            for d in htmlData do
+                                                                                                nodeProcessor <! d
+                                                                                        | _ ->  failwith "unknown message")))
+        let nodeprocessor = spawn system "nodeprocessor" (actorOf2 (fun mailbox m -> (
+                                                                                        let GetText (node:HtmlNode) nodeName = 
+                                                                                                node.Descendants (fun c -> c.HasClass nodeName) |> Seq.find (fun x-> true) |> fun x-> x.InnerText()
+                                                                                        match m with
+                                                                                        | r ->
+                                                                                            let repo = new Repository()
+                                                                                            printfn "nodeprocessorthreadID is  %d %s" Thread.CurrentThread.ManagedThreadId r.City
+                                                                                            //repo.AddRecord((System.DateTime.Parse(GetText r "au-deal-time")),)
+                                                                                            
+                                                                                        | _ ->  failwith "unknown message")))
         let currencies = ["usd"]//;"eur";"rub"]
         let actions = ["buy";"sell"]
         let cities = ["kiev";"vinnitsa";"dnepropetrovsk";"donetsk";"zhitomir";
@@ -27,44 +63,8 @@ module MinfinRawData =
             List.map (fun cur-> BuildUrl cur, cur) currencies 
             |> (fun funcs -> List.collect (fun act -> List.map (fun (f, cur) -> f act, act, cur) funcs) actions ) 
             |> (fun funcs -> List.collect (fun city -> List.map (fun (f, act, cur) -> f city, city, act, cur) funcs) cities ) 
-                                                        
-        let GetData urls = 
-            let GetBids uri = 
-                printfn "Load html from %s" uri
-                let results = HtmlDocument.Load(uri)
-                results.Descendants ["div"]
-                |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default")
-                |> List.ofSeq 
-            List.collect (fun (url, city, action, currency)-> List.map (fun x-> {City = city; Action = action; Currency = currency;  DealHtml = x}) (GetBids url)) urls
-        GetAuctionUrls currencies actions cities |> GetData
-
-module Processer =
-    open Minfin.Dal
-    open System
-    let Process (data:Record list) =
-        let rep = new Repository()
-        let GetText (node:HtmlNode) nodeName = 
-            node.Descendants (fun c -> c.HasClass nodeName) |> Seq.find (fun x-> true) |> fun x-> x.InnerText()
-        let MakeSum (data:string) = 
-            let processStr (d:string) =  
-                d.Substring(0, d.Length - 1)
-            int (processStr (data.Replace(" ", "")))
-        let GetBidNum (node:HtmlNode)  =
-            node.Descendants (fun c -> c.HasClass "js-showPhone au-dealer-phone-xxx") |> Seq.find (fun x-> true) |> fun x-> x.AttributeValue "data-bid-id" |> int
-        let GetPhoneNum node = 
-            let bidId = GetBidNum node
-            let bidIdForGet = string (bidId + 1)
-            let outsidePieceOfPhone =
-                GetText node "au-dealer-phone"
-            let insidePieceOfPhone = 
-                Http.RequestString("http://minfin.com.ua/modules/connector/connector.php"
-                ,query=["action", "auction-get-contacts"; "bid", bidIdForGet; "r", "true"]
-                ,body = FormValues ["bid", string bidId; "action", "auction-get-contacts"; "r", "true"]
-                ,headers = ["Accept","*/*";
-                "User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36";
-                "X-Requested-With","XMLHttpRequest"],cookieContainer = cc) |> JsonValue.Parse |> (fun x-> x?data.AsString())
-            outsidePieceOfPhone.Replace("xxx-x", insidePieceOfPhone)
-        
-
-        List.iter (fun x -> rep.AddRecord(DateTime.Parse (GetText x.DealHtml "au-deal-time"), "",0,"","","","",1,0)) data
+        for i in (GetAuctionUrls currencies actions cities) do
+            pageProcessor.Tell i
+        printfn "Actor system was ended"
         0
+

@@ -1,8 +1,11 @@
-﻿open Minfin.MinfinRawData
-
+﻿open Minfin.Actors
+open System.Threading
+open System
 [<EntryPoint>]
 let main argv = 
+    let a = async {return  StartSystem}
+    StartSystem
+    while true do
+        ""
+    0
     
-    let asd = GetRawData
-    printfn "%d" asd.Length
-    0 // return an integer exit code
