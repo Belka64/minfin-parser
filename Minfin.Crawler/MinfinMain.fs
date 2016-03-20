@@ -34,20 +34,21 @@ module Actors =
                  cookieContainer = cc)        
         
         let system = ActorSystem.Create("minfin")
-        let pageProcessor = spawn system "pageprocessor" (actorOf2 (fun mailbox m -> (
-                                                                                        let nodeProcessor = select "akka://minfin/user/nodeprocessor" system
-                                                                                        let GetBidNum (node:HtmlNode)  =
-                                                                                            node.Descendants (fun c -> c.HasClass "js-showPhone au-dealer-phone-xxx") |> Seq.find (fun x-> true) |> fun x-> x.AttributeValue "data-bid-id" |> int
-                                                                                        match m with
-                                                                                        | (url:string, city:string, action:string, currency:string)-> 
-                                                                                            printfn "Downloading %s; TI is %d" city Thread.CurrentThread.ManagedThreadId
-                                                                                            let htmlData = HtmlDocument.Load url 
-                                                                                                        |> (fun x -> x.Descendants ["div"]) 
-                                                                                                        |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default") 
-                                                                                                        |> Seq.map (fun n -> {City = city; Action = action; Currency = currency;  DealHtml = n; Url = url; BidId = (GetBidNum n)})
-                                                                                            for d in htmlData do
-                                                                                                nodeProcessor <! d
-                                                                                        | _ ->  failwith "unknown message")))
+        let pageProcessor = 
+            spawn system "pageprocessor" (actorOf2 (fun mailbox m -> (
+                                                                      let nodeProcessor = select "akka://minfin/user/nodeprocessor" system
+                                                                      let GetBidNum (node:HtmlNode)  =
+                                                                          node.Descendants (fun c -> c.HasClass "js-showPhone au-dealer-phone-xxx") |> Seq.find (fun x-> true) |> fun x-> x.AttributeValue "data-bid-id" |> int
+                                                                      match m with
+                                                                      | (url:string, city:string, action:string, currency:string)-> 
+                                                                          printfn "Downloading %s; TI is %d" city Thread.CurrentThread.ManagedThreadId
+                                                                          let htmlData = HtmlDocument.Load url 
+                                                                                      |> (fun x -> x.Descendants ["div"]) 
+                                                                                      |> Seq.filter (fun x-> x.HasClass "au-deal-row js-deal-row-default") 
+                                                                                      |> Seq.map (fun n -> {City = city; Action = action; Currency = currency;  DealHtml = n; Url = url; BidId = (GetBidNum n)})
+                                                                          for d in htmlData do
+                                                                              nodeProcessor <! d
+                                                                      | _ ->  failwith "unknown message")))
         let nodeprocessor = 
             spawn system "nodeprocessor" (actorOf2 (fun mailbox m -> (
                                                                       let GetText (node:HtmlNode) nodeName = 
@@ -75,11 +76,13 @@ module Actors =
                                                                               "X-Requested-With","XMLHttpRequest"],cookieContainer = cc) |> JsonValue.Parse |> (fun x-> x?data.AsString())
                                                                           outsidePieceOfPhone.Replace("xxx-x", insidePieceOfPhone)
                                                                       let rep = Repository()
+                                                                      printfn "node proc; TI is %d"  Thread.CurrentThread.ManagedThreadId
                                                                       match rep.Existed(m.BidId) with
                                                                       | true ->
                                                                           GetPhoneNum m.DealHtml m.Url |> ignore
                                                                           let r = m.DealHtml
                                                                           rep.AddRecord((System.DateTime.Parse(GetText r "au-deal-time")),(GetText r "au-deal-currency"), MakeSum(GetText r "au-deal-sum"), (GetPhoneNum m.DealHtml m.Url), m.City, m.Action, m.Currency, m.BidId, System.Decimal.Parse (GetText r "au-deal-currency"))
+                                                                      | false -> m |> ignore
                                                                       | _ ->  failwith "unknown message")))
         let currencies = ["usd"]//;"eur";"rub"]
         let actions = ["buy";"sell"]
@@ -96,7 +99,7 @@ module Actors =
             |> (fun funcs -> List.collect (fun act -> List.map (fun (f, cur) -> f act, act, cur) funcs) actions ) 
             |> (fun funcs -> List.collect (fun city -> List.map (fun (f, act, cur) -> f city, city, act, cur) funcs) cities ) 
         for i in (GetAuctionUrls currencies actions cities) do
-            pageProcessor.Tell i
-        printfn "Actor system was ended"
+            pageProcessor <! i
+        
         0
 

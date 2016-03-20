@@ -3,9 +3,7 @@ open System.Threading
 open System
 [<EntryPoint>]
 let main argv = 
-    let a = async {return  StartSystem}
-    StartSystem
-    while true do
-        ""
+    StartSystem |> ignore
+    Thread.Sleep 180000
     0
     
