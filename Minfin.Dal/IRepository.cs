@@ -7,6 +7,6 @@ namespace Minfin.Dal
         void AddRecord(DateTime dealTime, string rank, int sum, string phone, string city,
            string action, string curency, int bidId, decimal bidRate);
 
-        bool Existed(int bidId);
+        bool IsExisted(int bidId);
     }
 }

@@ -4,6 +4,6 @@ open System
 [<EntryPoint>]
 let main argv = 
     StartSystem |> ignore
-    Thread.Sleep 180000
+    Thread.Sleep 320000
     0
     

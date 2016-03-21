@@ -75,14 +75,14 @@ module Actors =
                                                                               "User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36";
                                                                               "X-Requested-With","XMLHttpRequest"],cookieContainer = cc) |> JsonValue.Parse |> (fun x-> x?data.AsString())
                                                                           outsidePieceOfPhone.Replace("xxx-x", insidePieceOfPhone)
-                                                                      let rep = Repository()
-                                                                      printfn "node proc; TI is %d"  Thread.CurrentThread.ManagedThreadId
-                                                                      match rep.Existed(m.BidId) with
-                                                                      | true ->
+                                                                      let rep = DapperRepo()
+                                                                      match rep.IsExisted(m.BidId) with
+                                                                      | false ->
+                                                                          printfn "Node processing: %d" m.BidId
                                                                           GetPhoneNum m.DealHtml m.Url |> ignore
                                                                           let r = m.DealHtml
                                                                           rep.AddRecord((System.DateTime.Parse(GetText r "au-deal-time")),(GetText r "au-deal-currency"), MakeSum(GetText r "au-deal-sum"), (GetPhoneNum m.DealHtml m.Url), m.City, m.Action, m.Currency, m.BidId, System.Decimal.Parse (GetText r "au-deal-currency"))
-                                                                      | false -> m |> ignore
+                                                                      | true -> printfn "Node skipping: %d" m.BidId
                                                                       | _ ->  failwith "unknown message")))
         let currencies = ["usd"]//;"eur";"rub"]
         let actions = ["buy";"sell"]
